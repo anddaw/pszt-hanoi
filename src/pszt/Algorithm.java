@@ -1,7 +1,7 @@
 package pszt;
 
 /**
- * abc
+ * def
  * Interfejs do iplementacji algorytmów przeszukiwania
  * implementecję klas zostawiam kol. Markowi
  *
