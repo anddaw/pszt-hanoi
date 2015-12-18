@@ -73,4 +73,15 @@ public class Model
 
 	}
 	
+	public static void main(String args[])
+	{
+		int[] ar1 = {0,0,0,0};
+		State state= new State(ar1);
+		
+		for(int i =0; i<1000000; i++)
+		{
+			state=state.nextStates()[0];
+		}
+		state.print();
+	}
 }
