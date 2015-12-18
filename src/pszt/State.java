@@ -18,6 +18,13 @@ public class State
 	 * {2,2,2,2} - 4, krążki wszystkie na pliku nr 2
 	 */
 	private int disks[];
+	
+	/**
+	 * Stan poprzedni.
+	 * Konstruktor domyślnie ustawia go na NULL, chyba że stan został 
+	 * wygenerowny za pomocą funkcji nextStates().
+	 */
+	public State parent;
 
 	public class BadRodException extends RuntimeException
 	{
@@ -26,6 +33,7 @@ public class State
 		 */
 		private static final long serialVersionUID = 1L;
 	}
+	
 
 	/**
 	 * Uzycie:
@@ -37,6 +45,7 @@ public class State
 	 */
 	public State(int disks[]) throws BadRodException
 	{
+		parent = null;
 		for (int rod : disks)
 		{
 			if (rod < 0 || rod > 2)
@@ -66,7 +75,9 @@ public class State
 		}
 		
 		tmpDisks[disk]=rod;
-		return new State(tmpDisks);
+		State tmpState = new State(tmpDisks);
+		tmpState.parent = this;
+		return tmpState;
 	}
 
 		/**
@@ -76,7 +87,7 @@ public class State
 	{
 		for (int rodNb = 0; rodNb <= 2; rodNb++)
 		{
-			System.out.print("|" + rodNb + ": ");
+			System.out.print("[ ");
 			for (int i = 0; i < disks.length; i++)
 			{
 				if (disks[i] == rodNb)
@@ -84,6 +95,7 @@ public class State
 					System.out.print(i + " ");
 				}
 			}
+			System.out.print("]");
 		}
 		System.out.print("\n");
 	}
