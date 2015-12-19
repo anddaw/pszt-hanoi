@@ -1,86 +1,119 @@
 package pszt;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
- * impelemntacja interfejsu Algorithm
- * Jest to przeszukiewanie wszerz (ang. Breadth-first search (BFS))
+ * impelemntacja interfejsu Algorithm 
+ * Przeszukiewanie wszerz (ang. Breadth-first search (BFS))
  * 
- * @param 	openStates 	- kolejka stanow otwartych(jeszcze nierozwinietych)
- * 			closedStates - lista stanow zamkenietych(rozwinietych)
- * 			courentState - stan dla ktorego znajdujemy stany nastepne
- * 			newStates	- stany nastpenue wlasnie badanego stanu
- * 			endStateFound - flaga czy znaleziono stan koncowy
+ * @param openStates
+ *            - kolejka stanow otwartych(jeszcze nierozwinietych)
+ * @param closedStates
+ *            - lista stanow zamkenietych(rozwinietych)
+ * @param courentState
+ *            - stan dla ktorego znajdujemy stany nastepne
+ * @param newStates
+ *            - stany nastpenue wlasnie badanego stanu
+ * @param endStateFound
+ *            - flaga czy znaleziono stan koncowy
  * 
- * @return 	solution 	- lista stanów włącznie z początkowym[0] i końcowym[n] - pomiędzy
+ * @return solution - lista stanów włącznie z początkowym[0] i końcowym[n] -
+ *         pomiędzy
  * @author Marek
  * */
 
 public class BFS implements Algorithm {
-	
-	/**Kolejka ostanow otwartych*/
-	Queue<State> openStates = new LinkedList<State>();
-	/**Lista ostanow zamknietcy*/
+
+	/** Lista stanow otwartych */
+	ArrayList<State> openStates = new ArrayList<State>();
+	/** Lista ostanow zamknietcy */
 	ArrayList<State> closedStates = new ArrayList<State>();
-	/**Lista stanow z rozwiazaniem*/
-	ArrayList<State> solution = new ArrayList<State>();
+
 	State courentState;
-	/**Znalezion stan koncowy, posiada informacje o rodzicu*/
+	/** Znaleziony stan koncowy */
 	State endState;
-	boolean endStateFound = false;
-	
+	boolean endStateFound;
+
 	private State startState;
 	private State finalState;
 
 	@Override
 	public State[] getSolution(State startState, State finalState) {
-		
+
 		init(startState, finalState);
-		
-		while(!endStateFound){
-			courentState = openStates.poll();
-			State [] newStates = courentState.nextStates();
-			if(isEndState(newStates)){
-				//prepareSolution();
-				break;
+
+		while (!endStateFound) {
+
+			courentState = openStates.remove(0);
+			State[] newStates = courentState.nextStates();
+			closedStates.add(courentState);
+
+			if (isEndState(newStates)) {
+				State[] solution = prepareSolution(endState);
+				endStateFound = true;
+				return solution;
+			} else {
+				for (State state : newStates)
+					if (!isOpenState(state) && !isClosedState(state))
+						openStates.add(state);
 			}
-			
-			
 		}
-		
-		
 		return null;
 	}
-	
-	
+
 	/**
 	 * inicjuje listy potrzebne do znalezienia rozwiazania i znienne globane
 	 */
-	private void init(State startState, State finalState){
+	private void init(State startState, State finalState) {
+		endStateFound = false;
 		this.startState = startState;
 		this.finalState = finalState;
 		openStates.add(this.startState);
-		
 	}
-	
+
 	/**
-	 * sprawdza czy wsród nowo znalezionych stanow nie ma stanu koncowego*/
-	boolean isEndState(State[] newStates){
-		for(State state : newStates){
-			if(state.equals(finalState)) {
-				endState = state;
+	 * sprawdza czy wsród nowo znalezionych stanow nie ma stanu koncowego
+	 */
+	boolean isEndState(State[] newStates) {
+		for (State state : newStates) {
+			if (state.equals(finalState)) {
+				endState = new State(state.disks);
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	
-	/**Metoda przygotowywująca rozwiązanie*/
-	/*State[] prepareSolution(){
-		
-	}*/
+
+	/** Metoda przygotowywująca rozwiązanie */
+	State[] prepareSolution(State endState) {
+
+		ArrayList<State> solutionList = new ArrayList<State>();
+		State tmpState = new State(endState.disks);
+		tmpState.parent = endState.parent;
+
+		/*
+		 * Odnajduje sciezke od znalezionego stanu konczacego do stanu
+		 * poczatkowego od razu zapisuje w poprawnej kolejnosci.
+		 */
+		while (tmpState.parent != null) {
+			solutionList.add(0, tmpState);
+			tmpState = tmpState.parent;
+		}
+
+		solutionList.add(0, startState);
+
+		State[] solutionArray = new State[solutionList.size()];
+		solutionList.toArray(solutionArray);
+		return solutionArray;
+	}
+
+	boolean isOpenState(State state) {
+
+		return true;
+	}
+
+	boolean isClosedState(State state) {
+		return true;
+	}
 
 }

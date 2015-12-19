@@ -17,7 +17,7 @@ public class State
 	 * {0,0,0} - trzy krążki, wszystkie na słupku 0,
 	 * {2,2,2,2} - 4, krążki wszystkie na pliku nr 2
 	 */
-	private int disks[];
+	protected int disks[];
 	
 	/**
 	 * Stan poprzedni.
