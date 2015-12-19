@@ -53,7 +53,6 @@ public class Model
 		 */
 	public void findSolution(int disks, Algorithm algorithm)
 	{
-		this.algorithm = algorithm;
 		setDisksNumber(disks);
 
 		if (algorithm == null)
@@ -75,13 +74,22 @@ public class Model
 	
 	public static void main(String args[])
 	{
-		int[] ar1 = {0,0,0,0};
-		State state= new State(ar1);
+		Model model = new Model();
+		BFS algorithmBFS = new BFS();
+		model.findSolution(3, algorithmBFS);
 		
-		for(int i =0; i<1000000; i++)
-		{
-			state=state.nextStates()[0];
+		for(State state : model.solution){
+			state.print();
 		}
-		state.print();
+		
+//		int[] ar1 = {0,0,0,0};
+//		State state= new State(ar1);
+//	
+//		
+//		for(int i =0; i<1000000; i++)
+//		{
+//			state=state.nextStates()[0];
+//		}
+//		state.print();
 	}
 }

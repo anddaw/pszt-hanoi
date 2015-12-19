@@ -43,7 +43,8 @@ public class BFS implements Algorithm {
 		init(startState, finalState);
 
 		while (!endStateFound) {
-
+			
+//			System.out.println(openStates.size());
 			courentState = openStates.remove(0);
 			State[] newStates = courentState.nextStates();
 			closedStates.add(courentState);
@@ -78,6 +79,7 @@ public class BFS implements Algorithm {
 		for (State state : newStates) {
 			if (state.equals(finalState)) {
 				endState = new State(state.disks);
+				endState.parent = state.parent;
 				return true;
 			}
 		}
@@ -107,13 +109,20 @@ public class BFS implements Algorithm {
 		return solutionArray;
 	}
 
+	/**Sprawdza czy podany stan jest na liscie stanow otwartych*/
 	boolean isOpenState(State state) {
-
-		return true;
+		for(State checkState : openStates)
+			if(checkState.equals(state)) 
+				return true;
+		
+		return false;
 	}
-
-	boolean isClosedState(State state) {
-		return true;
+	/**Sprawdza czy podany stan jest na liscie stanow zamknietych*/
+	boolean isClosedState(State state) {		
+		for (State checkState : closedStates)
+			if (checkState.equals(state))
+				return true;
+		return false;
 	}
 
 }
