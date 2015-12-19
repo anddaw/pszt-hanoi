@@ -86,7 +86,9 @@ public class BFS implements Algorithm {
 		return false;
 	}
 
-	/** Metoda przygotowywująca rozwiązanie */
+	/** Metoda przygotowywująca rozwiązanie 
+	 * Dostaje na wejscie stan odnaleziony stan konczowy
+	 * Zwraca tablice stanów włącznie z początkowym[0] i końcowym[n] - pomiędzy */
 	State[] prepareSolution(State endState) {
 
 		ArrayList<State> solutionList = new ArrayList<State>();

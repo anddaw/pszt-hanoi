@@ -74,14 +74,19 @@ public class Model
 	
 	public static void main(String args[])
 	{
+		/*-------------------------------------
+		 * testy Marka*/
 		Model model = new Model();
 		BFS algorithmBFS = new BFS();
-		model.findSolution(3, algorithmBFS);
+		model.findSolution(6, algorithmBFS);
 		
+		//wyswietlanie rozwiazania
 		for(State state : model.solution){
 			state.print();
 		}
+		/*-------------------------------------------------*/
 		
+/*testy Andrzeja*/		
 //		int[] ar1 = {0,0,0,0};
 //		State state= new State(ar1);
 //	
