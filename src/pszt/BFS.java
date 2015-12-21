@@ -3,11 +3,11 @@ package pszt;
 import java.util.ArrayList;
 
 /**
- * impelemntacja interfejsu Algorithm 
- * Przeszukiewanie wszerz (ang. Breadth-first search (BFS))
+ * impelemntacja interfejsu Algorithm Przeszukiewanie wszerz (ang. Breadth-first
+ * search (BFS))
  * 
  * @param openStates
- *            - kolejka stanow otwartych(jeszcze nierozwinietych)
+ *            - lista stanow otwartych(jeszcze nierozwinietych)
  * @param closedStates
  *            - lista stanow zamkenietych(rozwinietych)
  * @param courentState
@@ -40,12 +40,11 @@ public class BFS implements Algorithm {
 	@Override
 	public State[] getSolution(State startState, State finalState) {
 
-		init(startState, finalState);
+		init(startState, finalState); // krok 0
 
-		while (!endStateFound) {
-			
-//			System.out.println(openStates.size());
-			courentState = openStates.remove(0);
+		while (true) {
+			courentState = openStates.remove(0); // pobieramy pierwszy z listy
+													// otwartych
 			State[] newStates = courentState.nextStates();
 			closedStates.add(courentState);
 
@@ -56,17 +55,19 @@ public class BFS implements Algorithm {
 			} else {
 				for (State state : newStates)
 					if (!isOpenState(state) && !isClosedState(state))
-						openStates.add(state);
+						openStates.add(openStates.size(), state); // nowo
+																	// znalezione
+																	// dodajemy
+																	// na koniec
 			}
 		}
-		return null;
 	}
 
 	/**
 	 * inicjuje listy potrzebne do znalezienia rozwiazania i znienne globane
 	 */
 	private void init(State startState, State finalState) {
-		endStateFound = false;
+		// endStateFound = false;
 		this.startState = startState;
 		this.finalState = finalState;
 		openStates.add(this.startState);
@@ -78,49 +79,50 @@ public class BFS implements Algorithm {
 	boolean isEndState(State[] newStates) {
 		for (State state : newStates) {
 			if (state.equals(finalState)) {
-				endState = new State(state.disks);
-				endState.parent = state.parent;
+				endState = state;
 				return true;
 			}
 		}
 		return false;
 	}
 
-	/** Metoda przygotowywująca rozwiązanie 
-	 * Dostaje na wejscie stan odnaleziony stan konczowy
-	 * Zwraca tablice stanów włącznie z początkowym[0] i końcowym[n] - pomiędzy */
+	/**
+	 * Metoda przygotowywująca rozwiązanie Dostaje na wejscie stan odnaleziony
+	 * stan konczowy Zwraca tablice stanów włącznie z początkowym[0] i
+	 * końcowym[n] - pomiędzy
+	 */
 	State[] prepareSolution(State endState) {
 
 		ArrayList<State> solutionList = new ArrayList<State>();
-		State tmpState = new State(endState.disks);
-		tmpState.parent = endState.parent;
+		State tmpState;
+		tmpState = endState;
 
 		/*
 		 * Odnajduje sciezke od znalezionego stanu konczacego do stanu
 		 * poczatkowego od razu zapisuje w poprawnej kolejnosci.
 		 */
+		solutionList.add(0, tmpState);
 		while (tmpState.parent != null) {
-			solutionList.add(0, tmpState);
 			tmpState = tmpState.parent;
+			solutionList.add(0, tmpState);
 		}
-
-		solutionList.add(0, startState);
 
 		State[] solutionArray = new State[solutionList.size()];
 		solutionList.toArray(solutionArray);
 		return solutionArray;
 	}
 
-	/**Sprawdza czy podany stan jest na liscie stanow otwartych*/
+	/** Sprawdza czy podany stan jest na liscie stanow otwartych */
 	boolean isOpenState(State state) {
-		for(State checkState : openStates)
-			if(checkState.equals(state)) 
+		for (State checkState : openStates)
+			if (checkState.equals(state))
 				return true;
-		
+
 		return false;
 	}
-	/**Sprawdza czy podany stan jest na liscie stanow zamknietych*/
-	boolean isClosedState(State state) {		
+
+	/** Sprawdza czy podany stan jest na liscie stanow zamknietych */
+	boolean isClosedState(State state) {
 		for (State checkState : closedStates)
 			if (checkState.equals(state))
 				return true;

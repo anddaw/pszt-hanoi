@@ -7,11 +7,11 @@ import java.util.ArrayList;
  * angielskiej nazwy)
  * 
  * @param openStatesTop
- *            - kolejka stanow otwartych generowanych z startState
+ *            - lista stanow otwartych generowanych z startState
  * @param closedStatesTop
  *            - lista stanow zamkenietych generowanych z startState
  * @param openStatesBottom
- *            - kolejka stanow otwartych generowanych z finalState
+ *            - lista stanow otwartych generowanych z finalState
  * @param closedStatesBottom
  *            - lista stanow zamkenietych generowanych z finalState
  * @param courentStateTop
@@ -77,6 +77,7 @@ public class TwoWay implements Algorithm {
 	 * liscie stanow otwartych lub zamknietych
 	 * */
 	void expandState(ArrayList<State> openStates, ArrayList<State> closedStates) {
+		
 		/* Pobieramy pierwszy otwarty stan */
 		State courentState = openStates.remove(0);
 		State[] newStates = courentState.nextStates();
@@ -89,7 +90,7 @@ public class TwoWay implements Algorithm {
 				openStates.add(openStates.size(), state);
 	}
 
-	/** Sprawdza czy podany stan jest na liscie stanow otwartych */
+	/** Sprawdza czy podany stan jest na liscie stanow */
 	boolean isOnStateList(State state, ArrayList<State> list) {
 		for (State checkState : list)
 			if (checkState.equals(state))
@@ -129,10 +130,8 @@ public class TwoWay implements Algorithm {
 	State[] prepareSolution() {
 
 		ArrayList<State> solutionList = new ArrayList<State>();
-		State tmpStateTop = new State(dualStateTop.disks);
-		tmpStateTop.parent = dualStateTop.parent;
-		State tmpStateBottom = new State(dualStateBottom.disks);
-		tmpStateBottom.parent = dualStateBottom.parent;
+		State tmpStateTop = dualStateTop;
+		State tmpStateBottom= dualStateBottom;
 
 		/* Wpisanie na liste rozwiazania stanow poprzedajacych stan wspolny */
 		solutionList.add(0, tmpStateTop);
