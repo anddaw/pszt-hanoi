@@ -108,14 +108,34 @@ public class State
 		return disks.length;
 	}
 
+	
 	/**
 	 * Sprawdza czy stany są zgodne
 	 * @param another - drugi stan
 	 * @return true jeżeli zgodne
 	 */
-	public Boolean equals(State another)
+	public boolean equals(State another)
 	{
 		return Arrays.equals(this.disks, another.disks);
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof State))
+			return false;
+		else
+		{
+			State state = (State) obj;
+			return equals(state);
+		}
+
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Arrays.hashCode(disks);
 	}
 
 	/**

@@ -1,5 +1,8 @@
 package pszt;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Klasa reprezentująca stan modelu
  * Użycie:
@@ -74,27 +77,33 @@ public class Model
 	
 	public static void main(String args[])
 	{
-		/*-------------------------------------
-		 * testy Marka*/
-		Model model = new Model();
-		BFS algorithmBFS = new BFS();
-		model.findSolution(6, algorithmBFS);
-		
-		//wyswietlanie rozwiazania
-		for(State state : model.solution){
-			state.print();
-		}
-		/*-------------------------------------------------*/
+//		/*-------------------------------------
+//		 * testy Marka*/
+//		Model model = new Model();
+//		TwoWay twoWay = new TwoWay();
+//		BFS bfs = new BFS();
+//		long time = System.currentTimeMillis();
+//		model.findSolution(8, twoWay);
+//		
+//		//wyswietlanie rozwiazania
+//		for(State state : model.solution){
+//			state.print();
+//		}
+//		System.out.println(System.currentTimeMillis()-time);
+//		/*-------------------------------------------------*/
 		
 /*testy Andrzeja*/		
-//		int[] ar1 = {0,0,0,0};
-//		State state= new State(ar1);
-//	
-//		
-//		for(int i =0; i<1000000; i++)
-//		{
-//			state=state.nextStates()[0];
-//		}
-//		state.print();
+		int[] disks1 = {0,0,0};
+		int[] disks2 = {0,0,1};
+		State state1 = new State(disks1);
+		State state2 = new State(disks2);
+		State state3 = state1.nextStates()[0];
+		
+		
+		HashMap<State,State> map = new HashMap<State,State>();
+		map.put(state2, state2);
+		System.out.println(state2.equals(state3));
+		System.out.println(state2.hashCode()==state3.hashCode());
+		System.out.println(map.containsKey(state3));
 	}
 }
