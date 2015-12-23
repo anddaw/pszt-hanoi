@@ -1,6 +1,7 @@
 package pszt;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * impelemntacja interfejsu Algorithm Przeszukiewanie dwukierunkowe (brak
@@ -11,9 +12,9 @@ import java.util.ArrayList;
  * @param closedStatesTop
  *            - lista stanow zamkenietych generowanych z startState
  * @param openStatesBottom
- *            - lista stanow otwartych generowanych z finalState
+ *            - Hash stanow otwartych generowanych z finalState
  * @param closedStatesBottom
- *            - lista stanow zamkenietych generowanych z finalState
+ *            - hash stanow zamkenietych generowanych z finalState
  * @param courentStateTop
  *            - stan pochodny od startState obecnie rozwijany
  * @param courentStateBottom
@@ -36,8 +37,8 @@ public class TwoWay implements Algorithm {
 	private ArrayList<State> openStatesTop = new ArrayList<State>();
 	private ArrayList<State> openStatesBottom = new ArrayList<State>();
 	/** Lista ostanow zamknietcy */
-	private ArrayList<State> closedStatesTop = new ArrayList<State>();
-	private ArrayList<State> closedStatesBottom = new ArrayList<State>();
+	private HashMap<State, State> closedStatesTop = new HashMap<State, State>();
+	private HashMap<State, State> closedStatesBottom = new HashMap<State, State>();
 
 	/** Znaleziony stan koncowy */
 	State dualStateTop;
@@ -76,17 +77,17 @@ public class TwoWay implements Algorithm {
 	 * wpisuje na koniec listy stanow otawrtych, jeżeli nie ma ich jeszcze na
 	 * liscie stanow otwartych lub zamknietych
 	 * */
-	void expandState(ArrayList<State> openStates, ArrayList<State> closedStates) {
-		
+	void expandState(ArrayList<State> openStates, HashMap<State, State> closedStates) {
+
 		/* Pobieramy pierwszy otwarty stan */
 		State courentState = openStates.remove(0);
 		State[] newStates = courentState.nextStates();
-		closedStates.add(courentState);
+		closedStates.put(courentState, courentState);
 
 		/* Nowe unikalne stany dopisujemy do listy otwartych */
 		for (State state : newStates)
 			if (!isOnStateList(state, openStates)
-					&& !isOnStateList(state, closedStates))
+					&& !closedStates.containsKey(state) )
 				openStates.add(openStates.size(), state);
 	}
 
@@ -116,10 +117,9 @@ public class TwoWay implements Algorithm {
 		}
 
 		for (State topState : openStatesTop) {
-			for (State bottomState : closedStatesBottom)
-				if (topState.equals(bottomState)) {
+				if (closedStatesBottom.containsKey(topState)) {
 					dualStateTop = topState;
-					dualStateBottom = bottomState;
+					dualStateBottom = closedStatesBottom.get(topState);
 					return true;
 				}
 		}
@@ -131,7 +131,7 @@ public class TwoWay implements Algorithm {
 
 		ArrayList<State> solutionList = new ArrayList<State>();
 		State tmpStateTop = dualStateTop;
-		State tmpStateBottom= dualStateBottom;
+		State tmpStateBottom = dualStateBottom;
 
 		/* Wpisanie na liste rozwiazania stanow poprzedajacych stan wspolny */
 		solutionList.add(0, tmpStateTop);

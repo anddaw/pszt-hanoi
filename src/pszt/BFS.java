@@ -1,6 +1,7 @@
 package pszt;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * impelemntacja interfejsu Algorithm Przeszukiewanie wszerz (ang. Breadth-first
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * @param openStates
  *            - lista stanow otwartych(jeszcze nierozwinietych)
  * @param closedStates
- *            - lista stanow zamkenietych(rozwinietych)
+ *            - hash stanow zamkenietych(rozwinietych)
  * @param courentState
  *            - stan dla ktorego znajdujemy stany nastepne
  * @param newStates
@@ -27,7 +28,7 @@ public class BFS implements Algorithm {
 	/** Lista stanow otwartych */
 	ArrayList<State> openStates = new ArrayList<State>();
 	/** Lista ostanow zamknietcy */
-	ArrayList<State> closedStates = new ArrayList<State>();
+	HashMap<State, State> closedStates = new HashMap<State,State>();
 
 	State courentState;
 	/** Znaleziony stan koncowy */
@@ -46,7 +47,7 @@ public class BFS implements Algorithm {
 			courentState = openStates.remove(0); // pobieramy pierwszy z listy
 													// otwartych
 			State[] newStates = courentState.nextStates();
-			closedStates.add(courentState);
+			closedStates.put(courentState, courentState);
 
 			if (isEndState(newStates)) {
 				State[] solution = prepareSolution(endState);
@@ -123,8 +124,7 @@ public class BFS implements Algorithm {
 
 	/** Sprawdza czy podany stan jest na liscie stanow zamknietych */
 	boolean isClosedState(State state) {
-		for (State checkState : closedStates)
-			if (checkState.equals(state))
+			if (closedStates.containsKey(state))
 				return true;
 		return false;
 	}

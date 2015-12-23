@@ -1,7 +1,6 @@
 package pszt;
 
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.HashMap;
 
 /**
  * Klasa reprezentująca stan modelu
@@ -77,33 +76,49 @@ public class Model
 	
 	public static void main(String args[])
 	{
-//		/*-------------------------------------
-//		 * testy Marka*/
-//		Model model = new Model();
-//		TwoWay twoWay = new TwoWay();
-//		BFS bfs = new BFS();
-//		long time = System.currentTimeMillis();
-//		model.findSolution(8, twoWay);
+		/*-------------------------------------
+		 * testy Marka*/
+		Model model = new Model();
+		TwoWay twoWay = new TwoWay();
+		BFS bfs = new BFS();
+
+		long time = System.currentTimeMillis();
+		model.findSolution(11, twoWay);
+		
+		System.out.print("TwoWays:");
+		System.out.println(System.currentTimeMillis()-time);
+
+		//wyswietlanie rozwiazania
+		for(State state : model.solution){
+			state.print();
+		}
+
+		
+		time = System.currentTimeMillis();
+		model.findSolution(11, bfs);
+
+		System.out.print("\n\nBFS:");
+		System.out.println(System.currentTimeMillis()-time);
+		
+		//wyswietlanie rozwiazania
+		for(State state : model.solution){
+			state.print();
+		}
+
+		/*-------------------------------------------------*/
+		
+/*testy Andrzejka*/		
+//		int[] disks1 = {0,0,0};
+//		int[] disks2 = {0,0,1};
+//		State state1 = new State(disks1);
+//		State state2 = new State(disks2);
+//		State state3 = state1.nextStates()[0];
 //		
-//		//wyswietlanie rozwiazania
-//		for(State state : model.solution){
-//			state.print();
-//		}
-//		System.out.println(System.currentTimeMillis()-time);
-//		/*-------------------------------------------------*/
-		
-/*testy Andrzeja*/		
-		int[] disks1 = {0,0,0};
-		int[] disks2 = {0,0,1};
-		State state1 = new State(disks1);
-		State state2 = new State(disks2);
-		State state3 = state1.nextStates()[0];
-		
-		
-		HashMap<State,State> map = new HashMap<State,State>();
-		map.put(state2, state2);
-		System.out.println(state2.equals(state3));
-		System.out.println(state2.hashCode()==state3.hashCode());
-		System.out.println(map.containsKey(state3));
+//		
+//		HashMap<State,State> map = new HashMap<State,State>();
+//		map.put(state2, state2);
+//		System.out.println(state2.equals(state3));
+//		System.out.println(state2.hashCode()==state3.hashCode());
+//		System.out.println(map.containsKey(state3));
 	}
 }
