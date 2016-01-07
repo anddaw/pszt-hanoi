@@ -25,6 +25,13 @@ public class State
 	 * wygenerowny za pomocą funkcji nextStates().
 	 */
 	public State parent;
+	
+	/**
+	 * Poziom - na potrzby algorytmów preszukiwania,
+	 * automatycznie większy o 1 niż poziom rodzica
+	 * początkowo 0
+	 */
+	public int level;
 
 	public class BadRodException extends RuntimeException
 	{
@@ -46,6 +53,7 @@ public class State
 	public State(int disks[]) throws BadRodException
 	{
 		parent = null;
+		level = 0;
 		for (int rod : disks)
 		{
 			if (rod < 0 || rod > 2)
@@ -77,6 +85,7 @@ public class State
 		tmpDisks[disk]=rod;
 		State tmpState = new State(tmpDisks);
 		tmpState.parent = this;
+		tmpState.level = this.level + 1;
 		return tmpState;
 	}
 
