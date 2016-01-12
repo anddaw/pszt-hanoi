@@ -182,4 +182,11 @@ public class State
 		return statesArray;
 	}
 
+	public int whereIsChange() {
+		for(int change = 0; change < disks.length; change++)
+			if(disks[change]!=parent.disks[change])
+				return change;
+		// TODO
+		return 0;
+	}
 }

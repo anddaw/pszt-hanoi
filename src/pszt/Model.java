@@ -56,7 +56,7 @@ public class Model
 	 *            - algorytm rozwiązujący problem
 	 * 
 	 */
-	public void findSolution(int disks, Algorithm algorithm)
+	public State[] findSolution(int disks, Algorithm algorithm)
 	{
 		setDisksNumber(disks);
 
@@ -66,6 +66,7 @@ public class Model
 		} else
 		{
 			solution = algorithm.getSolution(startState, finalState);
+			return solution;
 		}
 	}
 
