@@ -128,7 +128,6 @@ public class PsztPanel extends JPanel
 					fieldTextAmountOfPuzzle.setEnabled(false);
 					buttonRestart.setEnabled(true);
 					buttonRun.setEnabled(true);
-					CreateTower(amountPuzzle);
 					/* Ustawienie licznikow krazkow na palikach */
 					amountInTower[0] = amountPuzzle;
 					amountInTower[1] = 0;
@@ -170,6 +169,7 @@ public class PsztPanel extends JPanel
 				solution = model.findSolution(amountPuzzle, algorithm);
 				lastState = solution[0].getDisks();
 				whichState = 0;
+				CreateTower(amountPuzzle);
 				
 			}
 		});
@@ -276,12 +276,21 @@ public class PsztPanel extends JPanel
 	 *            - wysokość wieży
 	 */
 	private void CreateTower(int heightOfTower)
-	{
+ {
 		int x = 15, y = 610, width = 200; // odpowiednie parametry do setBounds
 		for (int i = 0; i < heightOfTower; i++, x += 5, y -= 20, width -= 10)
-		{
+			{
 			Canvas canvas = new Canvas();
-			canvas.setBackground(Color.BLACK);
+			if (i % 5 == 0)
+				canvas.setBackground(Color.BLACK);
+			else if (i % 5 == 1)
+				canvas.setBackground(Color.BLUE);
+			else if (i % 5 == 2)
+				canvas.setBackground(Color.RED);
+			else if (i % 5 == 3)
+				canvas.setBackground(Color.WHITE);
+			else
+				canvas.setBackground(Color.GREEN);
 			canvas.setBounds(x, y, width, 15);
 			add(canvas);
 			Tower.add(canvas);
