@@ -23,7 +23,7 @@ import pszt.TwoWay;
  * klasa reprezentujaca widok, odpowiada za zmiane stanu i dzialanie calego programu
  * @author JD
  */
-//UWAGA brakuje odwolania do guzika URUCHOM - musi byc odwolanie do kontroler/algorytmu - zeby to sie w sensownym tempie dzialo
+
 public class PsztPanel extends JPanel
 {
 
@@ -45,27 +45,33 @@ public class PsztPanel extends JPanel
 	private int amountPuzzle;
 	/** Zmienna przechowuje liczbe krazkow na poszczegolnych palikach */
 	private int[] amountInTower;
-	/** Rozwiązanie **/
+	/** Rozwiązanie */
 	private State[] solution;
-
+	/** Stan poprzedni */
+	private int[] lastState;
+	/** Stan obecny*/
+	private int[] presentState;
+	/** Licznik stanęw*/
+	private int whichState;
+	
 	public PsztPanel()
 	{
 
 		comboBoxAlgorithm = new JComboBox<String>();
 		buttonRestart = new JButton("RESTART");
 		buttonAccept = new JButton("AKCEPTUJ");
-		buttonRun = new JButton("URUCHOM");
+		buttonRun = new JButton("NASTEPNY STAN");
 		buttonInfo = new JButton("WSPARCIE");
 		fieldTextAmountOfPuzzle = new JTextField();
 		fieldTextAmountOfPuzzle = new JTextField();
 		amountInTower = new int[3];
 		Tower = new ArrayList<Canvas>();
-		UstawPanel();
-		UstawAkcje();
+		createPanel();
+		createButtonAction();
 	}
 
 	/** Rozmiesczenie guzików i pol swingowych w odpowiednich miejscach */
-	private void UstawPanel()
+	private void createPanel()
 	{
 		// Ustawienie tla
 		setBackground(new Color(255, 204, 153));
@@ -79,19 +85,19 @@ public class PsztPanel extends JPanel
 		comboBoxAlgorithm.addItem("Przeszukiwanie dwukierunkowe");
 		add(comboBoxAlgorithm);
 
-		// Ustawienie guzika restart - ponownie mo�emy wybrac algorytm i zaczac
+		// Ustawienie guzika restart - ponownie mo�emy wybrac algorytm i zacząć
 		// od stanu poczatkowego
 		buttonRestart.setBounds(374, 10, 100, 40);
 		add(buttonRestart);
 		buttonRestart.setEnabled(false);
 
 		// Ustawienie guzika akceptuj - akceptacja algorytmu i sposobu
-		// przetwarzania (sposoby jak ma si� wykonywac)
+		// przetwarzania (sposoby jak ma się wykonywac)
 		buttonAccept.setBounds(374, 65, 100, 40);
 		add(buttonAccept);
 
 		// Ustawienie guzika uruchom -
-		buttonRun.setBounds(374, 120, 100, 40);
+		buttonRun.setBounds(362, 120, 130, 40);
 		add(buttonRun);
 		buttonRun.setEnabled(false);
 
@@ -107,7 +113,7 @@ public class PsztPanel extends JPanel
 	}
 
 	/** Ustawiane akcje dla poszególnych guzików */
-	private void UstawAkcje()
+	private void createButtonAction()
 	{
 
 		/* Akcja dla guzika AKCEPTUJ */
@@ -162,7 +168,9 @@ public class PsztPanel extends JPanel
 				
 				Model model = new Model();
 				solution = model.findSolution(amountPuzzle, algorithm);
-
+				lastState = solution[0].getDisks();
+				whichState = 0;
+				
 			}
 		});
 
@@ -186,15 +194,37 @@ public class PsztPanel extends JPanel
 				}
 				Tower.removeAll(Tower);
 				buttonRestart.setEnabled(false);
+				buttonRun.setEnabled(false);
 			}
 		});
 
-		/* Akcja dla guzika URUCHOM */
+		/* Akcja dla guzika NASTEPNY STAN */
 		buttonRun.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				whichState++;
+				presentState = solution[whichState].getDisks();
 				
+				for(int change = 0; change < amountPuzzle; change++)
+					if(lastState[change]!=presentState[change]) 
+						{
+							switchPuzzle(lastState[change], presentState[change], change); 
+							break;
+						}
+				
+				lastState = presentState;
+				
+				if(whichState == solution.length-1) 
+					{
+					buttonRun.setEnabled(false);
+					buttonAccept.setEnabled(false);
+					JOptionPane
+					.showMessageDialog(
+							null,
+							"Algorytm wykonał zadanie - przeniósł wieżę Hanoi",
+							"Wsparcie", JOptionPane.INFORMATION_MESSAGE);
+					}	
 			}
 		});
 
@@ -206,14 +236,14 @@ public class PsztPanel extends JPanel
 				JOptionPane
 						.showMessageDialog(
 								null,
-								"Wybierz algorytm, wpisz liczbę krążków(od 3 do 20)\nZaakceputuj kliknięciem w guzik AKCEPTUJ\nAby zacząć wykonywać wybrany algorytm naciśnij guzik URUCHOM\nAby zacząć wybieranie od nowa naciśnij guzik RESTART",
+								"Wybierz algorytm, wpisz liczbę krążków(od 3 do 20)\nZaakceputuj kliknięciem w guzik AKCEPTUJ po wczesniejszym wpisaniu liczby krazkow\nAby przejsc do nastepnego stanu wcisnij guzik NASTEPNY STAN\nAby zacząć wybieranie od nowa naciśnij guzik RESTART\nAutorzy:\nMarek Borkowski\nAndrzej Dawidziuk\nJakub Dudziak ",
 								"Wsparcie", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 	}
 
 	/**
-	 * Funkcja sprawdzaj�ca czy liczba kr��k�w jest z podanego zakresu i jest to
+	 * Funkcja sprawdzająca czy liczba krążków jest z podanego zakresu i jest to
 	 * napewno liczba
 	 * 
 	 * @param str
@@ -243,7 +273,7 @@ public class PsztPanel extends JPanel
 	 * Tworzenie wiezy Hanoi w stanie poczatkowym
 	 * 
 	 * @param heightOfTower
-	 *            - wysokosc wiezy
+	 *            - wysokość wieży
 	 */
 	private void CreateTower(int heightOfTower)
 	{
@@ -308,3 +338,5 @@ public class PsztPanel extends JPanel
 	}
 
 }
+
+

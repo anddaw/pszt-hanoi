@@ -20,7 +20,7 @@ public class PsztFrame extends JFrame {
 	/**Stworzenie odpowiedniej ramki*/
 	private void setupPanel(){
 		this.setContentPane(psztPanel);
-		this.setTitle("Temat: PW.P.4. Wieże Hanoi Autorzy: Marek Borkowski Andrzej Dawidziuk Jakub Dudziak Prowadz�cy: dr in�. Pawe� Wawrzynski");
+		this.setTitle("Temat: PW.P.4. Wieża Hanoi Prowadzący: dr inż. Paweł Wawrzyński");
 		this.setSize(660,660);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);

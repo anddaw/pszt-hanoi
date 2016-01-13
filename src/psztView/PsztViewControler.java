@@ -1,5 +1,11 @@
 package psztView;
 
+/**
+ * Klasa startowa
+ * Inicjuje cały program w niej main
+ * @author JD
+ *
+ */
 public class PsztViewControler
 {
 	PsztFrame psztFrame;
