@@ -160,6 +160,7 @@ public class PsztPanel extends JPanel
 					break;
 				case 1:
 					algorithm = new IterativeDepthFirst();
+					break;
 				default:
 					algorithm = new TwoWay();
 					break;

@@ -3,6 +3,7 @@
  */
 package pszt;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -33,24 +34,31 @@ public class IterativeDepthFirst implements Algorithm
 	private State[] getDLSolution(State startState, State finalState, int limit)
 	{
 		LinkedList<State> openStates = new LinkedList<State>();
+		HashMap<State, State> openStatesMap = new HashMap<State, State>();
+
 		openStates.push(startState);
+		openStatesMap.put(startState, startState);
 		State[] solution = null;
 
 		while (openStates.size() > 0)
 		{
 			State currentState = openStates.pop();
-
-			if (currentState.equals(finalState))
-			{
-				solution = prepareSolution(currentState);
-				break;
-			}
+			openStatesMap.remove(currentState);
 
 			if (currentState.level < limit)
 				for (State childState : currentState.nextStates())
-					openStates.push(childState);
-		}
+					if (!openStatesMap.containsKey(childState))
+					{
+						openStates.push(childState);
+						openStatesMap.put(childState, childState);
+					}
 
+			if (openStatesMap.containsKey(finalState))
+			{
+				solution = prepareSolution(openStatesMap.get(finalState));
+				break;
+			}
+		}
 		return solution;
 	}
 
